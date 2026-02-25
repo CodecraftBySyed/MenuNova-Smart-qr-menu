@@ -1,4 +1,4 @@
-const STATIC_CACHE_NAME = 'menunova-static-v2'; // Changed version to force update
+const STATIC_CACHE_NAME = 'menunova-static-v3';
 const API_CACHE_NAME = 'menunova-api-v1';
 
 const STATIC_ASSETS = [
@@ -12,12 +12,12 @@ const STATIC_ASSETS = [
   '/js/login.js',
   '/images/logo.png',
   '/images/favicon.ico'
+  // VIDEO REMOVED FROM HERE TO PREVENT 206 ERROR
 ];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(STATIC_CACHE_NAME).then((cache) => {
-      // We use a loop so if one file fails, the others still cache
       return Promise.allSettled(
         STATIC_ASSETS.map(asset => cache.add(asset))
       );
@@ -40,8 +40,12 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
 
-  // 1. Skip non-GET requests
   if (event.request.method !== 'GET') return;
+
+  // 1. SKIP VIDEOS: Range requests (206) cannot be cached.
+  if (url.pathname.endsWith('.webm') || url.pathname.endsWith('.mp4')) {
+    return; 
+  }
 
   // 2. API requests: Network First
   if (url.pathname.includes('/api/')) {
@@ -57,23 +61,26 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // 3. Static Assets & Pages: Cache First, but handle Redirects
+  // 3. Static Assets: Cache First, handle redirects
   event.respondWith(
     caches.match(event.request).then((cached) => {
       if (cached) return cached;
 
       return fetch(event.request).then((response) => {
-        // THIS IS THE FIX: If Cloudflare redirects .html to a clean URL,
-        // we just return the response and let the browser handle it.
+        // Handle Cloudflare Redirects
         if (response.redirected) {
           return response;
         }
 
-        const clone = response.clone();
-        caches.open(STATIC_CACHE_NAME).then(cache => cache.put(event.request, clone));
+        // Only cache successful standard responses (Status 200)
+        if (response.status === 200) {
+           const clone = response.clone();
+           caches.open(STATIC_CACHE_NAME).then(cache => cache.put(event.request, clone));
+        }
+        
         return response;
       }).catch(() => {
-          // Optional: Return a custom offline page here
+          // Offline fallback could go here
       });
     })
   );
