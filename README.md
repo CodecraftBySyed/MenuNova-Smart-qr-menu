@@ -15,17 +15,25 @@ MenuNova is a high-performance, PWA-ready digital menu solution designed for mod
 - **Database:** MongoDB Atlas.
 - **Storage:** Cloudinary (Images).
 
-## 🔐 Admin Access (Demo)
-To manage the menu, navigate to `/login` or `/admin.html`.
+## 🔒 Security & Configuration
+**Note:** This repository contains the source code for educational and review purposes. 
+- The `.env` file is **not included** in this repository to protect sensitive API keys and database credentials.
+- To run this locally, you must provide your own `.env` file with `MONGO_URI`, `CLOUDINARY_URL`, and `JWT_SECRET`.
+
+
+
+## 🔐 Admin Access (Demo Settings)
+To manage the menu, navigate to `/login`.
 * **Username:** `Admin`
 * **Password:** `Password`
 
-> *Note: In a production environment, ensure these credentials are changed via environment variables.*
+## 🚀 Deployment Overview
+1.  **Backend:** Deploy the `admin/` folder to Render.
+2.  **Frontend:** Connect the root directory to Cloudflare Pages.
+3.  **Service Worker:** Optimized for Cloudflare's "Pretty URLs" and bypasses caching for video `206` responses.
 
-## 🚀 Deployment Instructions
-1.  **Backend:** Deploy the `admin/` folder to Render. Set up `.env` with Mongo URI and Cloudinary credentials.
-2.  **Frontend:** Update `js/config.js` with the Render URL.
-3.  **Hosting:** Connect GitHub to Cloudflare Pages. Use `Framework: None` and `Root Directory: /`.
+## 📜 License
+This project is licensed under the **MIT License**. You are free to use, modify, and distribute this software, provided that all copies include the original copyright notice and license.
 
-## 📱 Service Worker
-The project includes a robust `sw.js` designed to handle Cloudflare's pretty-url redirects and skip partial video content caching for maximum stability.
+---
+*Created with ❤️ Codecraft by syed*
