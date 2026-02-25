@@ -15,14 +15,21 @@ const STATIC_ASSETS = [
   './video/video.webm'
 ];
 
+// Install Event - Caches static assets
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(STATIC_CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS)).then(() => {
-      return self.skipWaiting();
-    })
+    caches.open(STATIC_CACHE_NAME)
+      .then((cache) => {
+        // We use map to catch individual errors so one missing file doesn't break everything
+        return Promise.allSettled(
+          STATIC_ASSETS.map(asset => cache.add(asset))
+        );
+      })
+      .then(() => self.skipWaiting())
   );
 });
 
+// Activate Event - Cleans up old caches
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
@@ -35,28 +42,25 @@ self.addEventListener('activate', (event) => {
   );
 });
 
+// Fetch Event - Handles network requests
 self.addEventListener('fetch', (event) => {
   const request = event.request;
   const url = new URL(request.url);
 
-  // Only handle GET requests
-  if (request.method !== 'GET') {
-    return;
-  }
+  // 1. Only handle GET requests
+  if (request.method !== 'GET') return;
 
-  // Network-first strategy for API calls
+  // 2. Network-first strategy for API calls
   if (url.pathname.includes('/api/')) {
     event.respondWith(
       fetch(request)
         .then((response) => {
           const responseClone = response.clone();
           caches.open(API_CACHE_NAME).then((cache) => cache.put(request, responseClone));
-          // Notify clients that we're back online
           notifyClients({ type: 'ONLINE', message: 'Connected to server' });
           return response;
         })
         .catch(() => {
-          // Network failed - notify clients
           notifyClients({ type: 'OFFLINE', message: 'You are offline' });
           return caches.match(request);
         })
@@ -64,19 +68,23 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Cache-first strategy for same-origin static assets
+  // 3. Strategy for same-origin static assets (The Fix is here)
   if (url.origin === self.location.origin) {
     event.respondWith(
       caches.match(request).then((cached) => {
-        if (cached) {
-          return cached;
-        }
+        if (cached) return cached;
+
         return fetch(request).then((response) => {
+          // FIX: If the response is a redirect (common on Cloudflare), return it directly.
+          // This prevents the "redirect mode is not follow" error.
+          if (response.redirected) {
+            return response;
+          }
+
           const responseClone = response.clone();
           caches.open(STATIC_CACHE_NAME).then((cache) => cache.put(request, responseClone));
           return response;
         }).catch(() => {
-          // Network failed for static asset
           notifyClients({ type: 'OFFLINE', message: 'You are offline' });
           return null;
         });
@@ -93,4 +101,3 @@ function notifyClients(message) {
     });
   });
 }
-
