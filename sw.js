@@ -1,103 +1,80 @@
-const STATIC_CACHE_NAME = 'menunova-static-v1';
+const STATIC_CACHE_NAME = 'menunova-static-v2'; // Changed version to force update
 const API_CACHE_NAME = 'menunova-api-v1';
 
 const STATIC_ASSETS = [
-  './',
-  './index.html',
-  './login.html',
-  './src/output.css?v=2',
-  './src/style.css?v=2',
-  './js/script.js?v=2',
-  './js/config.js',
-  './js/login.js',
-  './images/logo.png',
-  './images/favicon.ico',
-  './video/video.webm'
+  '/',
+  '/index',
+  '/login',
+  '/src/output.css?v=2',
+  '/src/style.css?v=2',
+  '/js/script.js?v=2',
+  '/js/config.js',
+  '/js/login.js',
+  '/images/logo.png',
+  '/images/favicon.ico'
 ];
 
-// Install Event - Caches static assets
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(STATIC_CACHE_NAME)
-      .then((cache) => {
-        // We use map to catch individual errors so one missing file doesn't break everything
-        return Promise.allSettled(
-          STATIC_ASSETS.map(asset => cache.add(asset))
-        );
-      })
-      .then(() => self.skipWaiting())
+    caches.open(STATIC_CACHE_NAME).then((cache) => {
+      // We use a loop so if one file fails, the others still cache
+      return Promise.allSettled(
+        STATIC_ASSETS.map(asset => cache.add(asset))
+      );
+    }).then(() => self.skipWaiting())
   );
 });
 
-// Activate Event - Cleans up old caches
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
       Promise.all(
         keys
-          .filter((key) => key !== STATIC_CACHE_NAME && key !== API_CACHE_NAME)
+          .filter((key) => key !== STATIC_CACHE_NAME)
           .map((key) => caches.delete(key))
       )
     ).then(() => self.clients.claim())
   );
 });
 
-// Fetch Event - Handles network requests
 self.addEventListener('fetch', (event) => {
-  const request = event.request;
-  const url = new URL(request.url);
+  const url = new URL(event.request.url);
 
-  // 1. Only handle GET requests
-  if (request.method !== 'GET') return;
+  // 1. Skip non-GET requests
+  if (event.request.method !== 'GET') return;
 
-  // 2. Network-first strategy for API calls
+  // 2. API requests: Network First
   if (url.pathname.includes('/api/')) {
     event.respondWith(
-      fetch(request)
-        .then((response) => {
-          const responseClone = response.clone();
-          caches.open(API_CACHE_NAME).then((cache) => cache.put(request, responseClone));
-          notifyClients({ type: 'ONLINE', message: 'Connected to server' });
+      fetch(event.request)
+        .then(response => {
+          const clone = response.clone();
+          caches.open(API_CACHE_NAME).then(cache => cache.put(event.request, clone));
           return response;
         })
-        .catch(() => {
-          notifyClients({ type: 'OFFLINE', message: 'You are offline' });
-          return caches.match(request);
-        })
+        .catch(() => caches.match(event.request))
     );
     return;
   }
 
-  // 3. Strategy for same-origin static assets (The Fix is here)
-  if (url.origin === self.location.origin) {
-    event.respondWith(
-      caches.match(request).then((cached) => {
-        if (cached) return cached;
+  // 3. Static Assets & Pages: Cache First, but handle Redirects
+  event.respondWith(
+    caches.match(event.request).then((cached) => {
+      if (cached) return cached;
 
-        return fetch(request).then((response) => {
-          // FIX: If the response is a redirect (common on Cloudflare), return it directly.
-          // This prevents the "redirect mode is not follow" error.
-          if (response.redirected) {
-            return response;
-          }
-
-          const responseClone = response.clone();
-          caches.open(STATIC_CACHE_NAME).then((cache) => cache.put(request, responseClone));
+      return fetch(event.request).then((response) => {
+        // THIS IS THE FIX: If Cloudflare redirects .html to a clean URL,
+        // we just return the response and let the browser handle it.
+        if (response.redirected) {
           return response;
-        }).catch(() => {
-          notifyClients({ type: 'OFFLINE', message: 'You are offline' });
-          return null;
-        });
-      })
-    );
-  }
-});
+        }
 
-// Notify all clients of network status changes
-function notifyClients(message) {
-  self.clients.matchAll().then((clients) => {
-    clients.forEach((client) => {
-      client.postMessage(message);
-    });
-  });
-}
+        const clone = response.clone();
+        caches.open(STATIC_CACHE_NAME).then(cache => cache.put(event.request, clone));
+        return response;
+      }).catch(() => {
+          // Optional: Return a custom offline page here
+      });
+    })
+  );
+});
