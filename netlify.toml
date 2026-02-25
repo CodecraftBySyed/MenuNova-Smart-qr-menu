@@ -1,29 +1,22 @@
-# Netlify Configuration for MenuNova Smart QR Menu
-
 [build]
   command = "npm install && npm install --prefix functions"
   functions = "functions"
   publish = "."
 
-# Redirects: Map API calls to Netlify Functions
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/server/api/:splat"
   status = 200
 
-# Redirect root SPA requests for client-side routing
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
 
-# Headers for security and performance
 [[headers]]
   for = "/*"
   [headers.values]
     Access-Control-Allow-Origin = "*"
     X-Content-Type-Options = "nosniff"
     X-Frame-Options = "SAMEORIGIN"
-    X-XSS-Protection = "1; mode=block"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    # REMOVED Content-Encoding line to prevent decoding errors
+    # Content-Encoding removed to fix decoding errors
