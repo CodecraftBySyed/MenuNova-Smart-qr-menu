@@ -1,0 +1,67 @@
+# Netlify Configuration for MenuNova Smart QR Menu
+
+# Build settings for Netlify
+[build]
+  command = "npm install && npm install --prefix functions"
+  functions = "functions"
+  publish = "."
+
+# Environment variables (set these in Netlify UI for sensitive data)
+[env]
+  # Netlify will read from your environment variables configured in the dashboard
+
+# Redirects: Map API calls to Netlify Functions
+# This ensures all /api/* requests go to the serverless handler
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/server/:splat"
+  status = 200
+
+# Redirect root SPA requests (for client-side routing)
+# If your frontend uses client-side routing, uncomment below
+# [[redirects]]
+#   from = "/*"
+#   to = "/index.html"
+#   status = 200
+
+# Headers for security and performance
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Allow requests from Netlify domain and your production URLs
+    Access-Control-Allow-Origin = "https://menunova.netlify.app"
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "SAMEORIGIN"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    # Enable compression for large JSON payloads (127+ menu items)
+    Content-Encoding = "gzip"
+
+# Cache settings for static files
+[[headers]]
+  for = "/src/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# PWA & Manifest
+[[headers]]
+  for = "/manifest.json"
+  [headers.values]
+    Content-Type = "application/manifest+json"
+    Cache-Control = "public, max-age=3600"
+
+# Service Worker should not be cached aggressively
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
