@@ -32,10 +32,10 @@ app.use(async (req, res, next) => {
 });
 
 // Routes
-app.get('/api', (req, res) => res.send('✅ API is running...'));
-app.use('/api/auth', authRoutes);
-app.use('/api/menu', menuRoutes);
-app.use('/api/whatsapp', whatsappRoutes);
+app.get('/', (req, res) => res.send('✅ API is running...'));
+app.use('/auth', authRoutes);
+app.use('/menu', menuRoutes);
+app.use('/whatsapp', whatsappRoutes);
 
 // Error handler
 app.use((err, req, res, next) => {
