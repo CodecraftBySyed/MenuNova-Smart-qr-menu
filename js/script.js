@@ -1,6 +1,6 @@
 // Menu API URLs (uses API_BASE_URL from config.js)
-const menuUrl = `${API_BASE_URL}/api/menu`;
-const waSettingsUrl = `${API_BASE_URL}/api/whatsapp/settings`;
+const menuUrl = `${API_BASE_URL}/menu`;
+const waSettingsUrl = `${API_BASE_URL}/whatsapp/settings`;
 
 // Cloudinary base for all menu item images
 // NOTE: Do NOT include folder here; we handle folder/public_id from item.image
