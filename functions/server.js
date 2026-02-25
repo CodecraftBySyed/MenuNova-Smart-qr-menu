@@ -40,4 +40,7 @@ app.use('/api/menu', menuRoutes);
 app.use('/api/whatsapp', whatsappRoutes);
 
 // 4. Export for Netlify
-export const handler = serverless(app);
+export const handler = serverless(app, {
+  binary: ['image/*', 'application/javascript', 'text/css', 'application/json']
+});
+
