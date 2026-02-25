@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MenuNova – Smart QR Menu System</title>
+    <meta name="title" content="MenuNova | Smart QR Menu System">
+    <meta name="description" content="Explore menus instantly with MenuNova — a fast, clean, mobile‑first smart QR menu system by CodeCraft.">
+
+    <meta name="keywords" content="MenuNova, Smart QR Menu, Digital Menu, QR Code Menu, CodeCraft">
+
+    <meta name="author" content="CodeCraft">
+    <meta name="robots" content="index, follow">
+
+<!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="MenuNova | Smart QR Menu System">
+    <meta property="og:description" content="Experience a premium, mobile‑first QR menu with MenuNova — by CodeCraft.">
+    <meta property="og:site_name" content="MenuNova">
+    <meta property="og:image" content="https://yourdomain.com/images/og-logo.png">
+    <link rel="shortcut icon" href="./images/favicon.ico" type="image/x-icon">
+
+    <!-- PWA & SEO -->
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="./images/logo.png">
+    <meta name="google-site-verification" content="ckswWh_fm109ow5ucG8Kh1y-vOnj5avv0IS-SE_Xl20" />
+    
+    <!-- Tailwind CLI -->
+    <link rel="stylesheet" href="./src/output.css?v=2">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="./src/style.css?v=2">
+</head>
+<body class="text-gray-800 page-fade">
+<!-- DEMO BANNER -->
+<div class="bg-yellow-50 text-yellow-900 text-center py-2 text-sm border-b border-yellow-100">
+Crafted with passion by
+<a href="https://codecraftbysyed-portfolio.vercel.app" target="_blank" rel="noopener" class="font-semibold text-red-600 hover:underline">CodeCraft by Syed</a>
+— Where code meets creativity
+</div>
+
+
+    <!-- HERO HEADER WITH VIDEO BACKGROUND -->
+    <header class="hero-header" id="heroHeader">
+        <video autoplay muted playsinline loop preload="metadata">
+            <source src="./video/video.webm" type="video/webm">
+        </video>
+        <div class="hero-overlay"></div>
+        
+        <div class="hero-content">
+            <!-- Modern Offer Box -->
+            <div class="offer-box">
+                <div class="offer-badge" id="welcomeText">Welcome To Cafe</div>
+                 
+                <!-- LOGO INSTEAD OF TITLE -->
+                 <a href="login.html">
+                 <img 
+                    src="./images/logo.png" 
+                    alt="Brand Logo"
+                    class="w-40 h-40 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full object-cover mx-auto" id="heroLogo"
+                 />
+                 </a>
+                <p class="offer-text">Enjoy premium dishes at unbeatable prices. Valid for first-time orders only!</p>
+                <a href="#menuContainer" class="offer-cta">Order Now</a>
+            </div>
+
+            <!-- Hero Text -->
+            <div class="mt-8">
+                <h1 class="display-font text-5xl md:text-7xl font-bold text-white mb-1">MenuNova</h1>
+                <p class="text-gray-200 text-lg md:text-2xl mb-1">Smart QR Menu System</p>
+                <p class="text-gray-300 text-sm md:text-base">by CodeCraft</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- MENU SECTION -->
+    <section id="menuContainer" class="px-4 sm:px-6 py-8 md:py-12 pb-40 md:pb-24 bg-gradient-to-br from-white via-blue-50 to-cyan-50">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="display-font text-3xl sm:text-4xl md:text-5xl font-bold text-slate-800 mb-3 theme-header">Our Menu</h2>
+            <p class="text-gray-600 text-base sm:text-lg mb-8">Discover extraordinary flavors crafted with passion</p>
+
+            <!-- Search + Specials Row -->
+            <div class="flex flex-col gap-4 mb-8">
+                <!-- Search bar -->
+                <div class="relative max-w-md">
+                    <input
+                        id="menuSearch"
+                        type="text"
+                        placeholder="Search items by name..."
+                        class="w-full rounded-full border-2 border-gray-200 bg-white/80 backdrop-blur px-4 py-3 pl-11 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent transition"
+                    />
+                    <span class="absolute left-3.5 top-3.5 text-gray-400 text-base">🔍</span>
+                    <button id="clearSearch" class="absolute right-4 top-3.5 text-gray-400 hover:text-gray-600 text-lg transition hidden">×</button>
+                </div>
+
+                <!-- Daily specials -->
+                <div id="specialsBar" class="hidden rounded-2xl bg-gradient-to-r from-amber-100 via-rose-50 to-emerald-50 px-4 py-4 shadow-md border border-amber-200">
+                    <div class="flex items-start gap-2 flex-col sm:flex-row sm:items-center">
+                        <span class="text-lg font-bold text-amber-900 flex items-center gap-1">
+                            <span>🌟</span>
+                            <span>Today's Specials:</span>
+                        </span>
+                        <div id="specialsList" class="flex flex-wrap gap-2"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dynamic menu grid populated by JS -->
+            <div id="menuGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 md:gap-6"></div>
+        </div>
+    </section>
+
+
+    <!-- BOTTOM MOBILE MENU (original flex layout restored) -->
+    <div class="fixed bottom-0 left-0 right-0 header-gradient z-50">
+        <div class="px-2">
+            <nav class="flex items-center justify-between h-14">
+                <button data-filter="all" aria-label="All" class="mobile-menu-btn active flex-1 flex items-center justify-center transition-all rounded-md">
+                    <span class="icon">🍽️</span>
+                    <span class="label hidden md:inline-block ml-2">All</span>
+                </button>
+                <button data-filter="starters" aria-label="Starters" class="mobile-menu-btn flex-1 flex items-center justify-center transition-all rounded-md">
+                    <span class="icon">🥡</span>
+                    <span class="label hidden md:inline-block ml-2">Starters</span>
+                </button>
+                <button data-filter="main" aria-label="Main" class="mobile-menu-btn flex-1 flex items-center justify-center transition-all rounded-md">
+                    <span class="icon">🍔</span>
+                    <span class="label hidden md:inline-block ml-2">Main</span>
+                </button>
+                <button data-filter="drinks" aria-label="Drinks" class="mobile-menu-btn flex-1 flex items-center justify-center transition-all rounded-md">
+                    <span class="icon">🥤</span>
+                    <span class="label hidden md:inline-block ml-2">Drinks</span>
+                </button>
+                <button data-filter="desserts" aria-label="Desserts" class="mobile-menu-btn flex-1 flex items-center justify-center transition-all rounded-md">
+                    <span class="icon">🍰</span>
+                    <span class="label hidden md:inline-block ml-2">Desserts</span>
+                </button>
+            </nav>
+        </div>
+    </div>
+
+    <!-- SCROLL TO FOOTER BUTTON -->
+    <div class="text-center py-8">
+        <button id="scrollToFooterBtn" aria-expanded="false" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-br from-pink-500 to-red-500 text-white shadow-lg hover:shadow-2xl hover:scale-110 transition-all duration-300">
+            <span id="scrollBtnIcon" class="bounce-arrow text-2xl leading-none">↓</span>
+            <span id="scrollBtnLabel" class="text-sm font-semibold leading-none">Open</span>
+        </button>
+    </div>
+
+    <!-- Overlay shown when footer opens -->
+    <div id="footerOverlay" aria-hidden="true"></div>
+
+<!-- FOOTER hidden panel that slides up -->
+<footer id="footerSection" class="footer-panel bg-black text-white py-8 md:py-12 max-h-70vh overflow-y-auto">
+    <div class="max-w-6xl mx-auto px-6">
+        <!-- Footer Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            <!-- About Section with Logo -->
+            <div>
+                <!-- Brand Logo -->
+                <div class="flex items-center gap-3 mb-4">
+                    <img src="./images/logo.png" 
+                         alt="MenuNova Logo" 
+                         class="footer-logo"
+                         loading="lazy"
+                         decoding="async"
+                         onerror="this.style.display='none'">
+                    <h3 class="display-font text-xl font-bold text-white">MenuNova</h3>
+                </div>
+                <p class="text-sm leading-relaxed">MenuNova – A premium, mobile‑first QR menu system that helps customers explore menus and order faster. Clean, fast, and effortless for modern cafés and restaurants.</p>
+            </div>
+
+            <!-- Quick Links -->
+            <div>
+                <h3 class="text-lg font-bold text-white mb-4">Quick Links</h3>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="#" class="hover:text-white transition-colors">Menu</a></li>
+                    <li><a href="#menuContainer" class="hover:text-white transition-colors">Main</a></li>
+                    <li><a href="#menuContainer" class="hover:text-white transition-colors">Drinks</a></li>
+                    <li><a href="#menuContainer" class="hover:text-white transition-colors">Desserts</a></li>
+                </ul>
+            </div>
+
+            <!-- Social Contact -->
+            <div>
+                <h3 class="text-lg font-bold text-white mb-4">Follow Us</h3>
+                <div class="flex gap-4 mb-4">
+                    <a href="https://www.facebook.com/codecraftbysyed" target="_blank" rel="noopener" class="text-gray-400 hover:text-blue-400 transition-colors text-2xl" aria-label="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="https://www.instagram.com/codecraft_by_syed/" target="_blank" rel="noopener" class="text-gray-400 hover:text-pink-400 transition-colors text-2xl" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="mailto:codecraftbysyed@gmail.com" class="text-gray-400 hover:text-red-400 transition-colors text-2xl" aria-label="Email">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                </div>
+                <p class="text-sm"><strong>Phone:</strong> +91 000 111 2222</p>
+                <p class="text-sm"><strong>Address:</strong> Krishnagiri Road, Tirupathur, Tamil Nadu 635601</p>
+            </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="border-t border-gray-700 my-8"></div>
+
+        <!-- Footer Bottom -->
+        <div class="flex flex-col md:flex-row items-center justify-between text-xs gap-4">
+            <p class="text-gray-400 mb-0 md:mb-0">© 2025 MenuNova. All rights reserved.</p>
+            <div class="flex gap-4 items-center">
+                <p class="text-gray-400">Powered by <a href="https://codecraftbysyed-portfolio.vercel.app" target="_blank" rel="noopener" style="color:var(--c-red-1)" class="font-bold hover:underline">CodeCraft by Syed</a></p>
+                <span class="text-gray-600">|</span>
+                <p class="text-red-500 hover:text-red-400 transition-colors font-medium"><strong>Disclaimer:</strong> MenuNova is a digital menu provider. Order fulfillment and payments are the sole responsibility of the restaurant.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+        <!-- WhatsApp Order Modal -->
+    <div id="orderModalBackdrop" class="fixed inset-0 bg-black/50 transition-opacity duration-200 opacity-0 pointer-events-none" aria-hidden="true"></div>
+    <div id="orderModal" class="fixed inset-0 flex items-center justify-center p-4 order-modal-hidden pointer-events-none" aria-hidden="true" inert>
+      <div class="order-modal-box w-full max-w-md sm:max-w-lg md:max-w-xl bg-white rounded-2xl shadow-2xl border border-gray-200 p-6 transform transition-transform duration-200 scale-95">
+        <div class="mb-4">
+          <h3 id="orderModalProductName" class="text-lg font-bold text-slate-800"></h3>
+          <p class="text-sm text-gray-600">Price: <span id="orderModalProductPrice" class="font-semibold"></span></p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 items-center mb-4">
+          <div class="sm:col-span-1">
+            <label class="text-sm font-semibold text-gray-700 mb-1 block">Quantity</label>
+            <div class="flex items-center gap-2">
+              <button id="orderModalQtyMinus" type="button" class="px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200">−</button>
+              <input id="orderModalQuantity" type="number" min="1" value="1" class="w-16 text-center border-2 border-gray-200 rounded-lg py-2">
+              <button id="orderModalQtyPlus" type="button" class="px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200">+</button>
+            </div>
+          </div>
+          <div class="sm:col-span-2">
+            <label class="text-sm font-semibold text-gray-700 mb-1 block">Table Number</label>
+            <input id="orderModalTableNumber" type="text" placeholder="Enter your table number" class="w-full border-2 border-gray-200 rounded-lg py-2 px-3">
+            <p id="orderModalTableError" class="hidden text-xs text-red-600 mt-1"></p>
+          </div>
+        </div>
+        <div class="mb-4">
+          <label class="text-sm font-semibold text-gray-700 mb-1 block">Special Instructions</label>
+          <textarea id="orderModalSpecialInstructions" rows="3" class="w-full border-2 border-gray-200 rounded-lg py-2 px-3" placeholder="Optional"></textarea>
+        </div>
+        <div class="mb-4">
+          <p class="text-sm text-gray-700">Total: <span id="orderModalTotal" class="font-bold"></span></p>
+        </div>
+        <p id="orderModalWaNotConfigured" class="hidden text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded-lg p-2 mb-3">WhatsApp is not configured by admin.</p>
+        <div class="flex flex-col sm:flex-row gap-3">
+          <button id="orderModalCancel" type="button" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold py-2.5 rounded-lg">Cancel</button>
+          <button id="orderModalSubmit" type="button" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 rounded-lg">Confirm</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll To Top Button -->
+    <button id="scrollToTopBtn" class="scroll-to-top-btn hidden fixed bottom-20 sm:bottom-6 right-6 w-12 h-12 rounded-full bg-gradient-to-br from-amber-500 to-amber-600 text-white shadow-xl backdrop-blur-md border border-amber-400/30 hover:from-amber-600 hover:to-amber-700 transition-all duration-300 z-40 flex items-center justify-center group" aria-label="Scroll to top">
+        <svg class="w-6 h-6 group-hover:animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 19V5M5 12l7-7 7 7"></path>
+        </svg>
+    </button>
+
+    <style>
+        /* Scroll To Top Button Premium Styling */
+        .scroll-to-top-btn {
+            will-change: opacity, transform;
+        }
+
+        .scroll-to-top-btn.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        .scroll-to-top-btn.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .scroll-to-top-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Glow effect on hover */
+        .scroll-to-top-btn:hover {
+            box-shadow: 0 0 30px rgba(217, 119, 6, 0.4), 0 8px 32px rgba(217, 119, 6, 0.2);
+        }
+    </style>
+
+    <!-- CDN: SweetAlert2 and anime.js -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" defer></script>
+    <!-- API Configuration and Main Script -->
+    <script src="./js/config.js" defer></script>
+    <!-- FIXED: Correct script path -->
+    <script src="./js/script.js?v=2" defer></script>
+</body>
+
+</html>
+
+
+
+
