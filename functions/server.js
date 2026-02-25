@@ -17,7 +17,6 @@ app.use(cors({
   credentials: true
 }));
 
-// Netlify uses its own compression, so we ensure no additional layers interfere
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
@@ -28,7 +27,6 @@ app.use(async (req, res, next) => {
     next();
   } catch (err) {
     console.error('Database connection failed:', err);
-    // Use a standard JSON response to avoid encoding issues
     res.setHeader('Content-Type', 'application/json');
     return res.status(500).send(JSON.stringify({ error: 'Database connection error' }));
   }
@@ -43,9 +41,5 @@ app.use('/api/auth', authRoutes);
 app.use('/api/menu', menuRoutes);
 app.use('/api/whatsapp', whatsappRoutes);
 
-/**
- * 4. Export for Netlify 
- * We REMOVE the binary array for standard JSON APIs to prevent 
- * the 'Content-Encoding' mismatch.
- */
+// 4. Clean Export (No binary mode for JSON APIs)
 export const handler = serverless(app);
