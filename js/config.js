@@ -1,13 +1,8 @@
 const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
-// Production URL should be the relative /api path handled by redirects in netlify.toml
+// Use the /api prefix which netlify.toml redirects to your function
 const API_BASE_URL = isLocalhost 
-  ? 'http://localhost:5000' 
+  ? 'http://localhost:5000/api' 
   : '/api';
 
-console.log(`🔧 API Configuration: ${isLocalhost ? 'LOCALHOST' : 'PRODUCTION (Netlify)'}`);
-console.log(`📡 API Base URL: ${API_BASE_URL}`);
-
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { API_BASE_URL, isLocalhost };
-}
+console.log(`🔧 API Configuration: ${isLocalhost ? 'LOCALHOST' : 'PRODUCTION'}`);
