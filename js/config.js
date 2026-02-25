@@ -8,8 +8,8 @@ const isLocalhost = window.location.hostname === 'localhost' || window.location.
 
 // Set API base URL based on environment
 const API_BASE_URL = isLocalhost 
-  ? 'http://localhost:5000'
-  : window.location.origin;
+  ? 'http://localhost:5000' 
+  : 'https://menunova-smart-qr-menu.onrender.com'; // <--- PASTE YOUR ACTUAL RENDER URL HERE
 
 console.log(`🔧 API Configuration: ${isLocalhost ? 'LOCALHOST' : 'PRODUCTION'}`);
 console.log(`📡 API Base URL: ${API_BASE_URL}`);
@@ -18,3 +18,4 @@ console.log(`📡 API Base URL: ${API_BASE_URL}`);
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { API_BASE_URL, isLocalhost };
 }
+
