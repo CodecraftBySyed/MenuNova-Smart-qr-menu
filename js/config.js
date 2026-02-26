@@ -9,7 +9,7 @@ const isLocalhost = window.location.hostname === 'localhost' || window.location.
 // Set API base URL based on environment
 const API_BASE_URL = isLocalhost 
   ? 'http://localhost:5000'
-  : window.location.origin;
+  : 'https://menunova-smart-qr-menu-production.up.railway.app';
 
 console.log(`🔧 API Configuration: ${isLocalhost ? 'LOCALHOST' : 'PRODUCTION'}`);
 console.log(`📡 API Base URL: ${API_BASE_URL}`);
