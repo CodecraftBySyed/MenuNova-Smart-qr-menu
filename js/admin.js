@@ -891,7 +891,7 @@ function logout() {
     localStorage.removeItem('adminToken');
     console.log('Token removed from localStorage');
     // Use direct redirect for safety
-    window.location.href = 'login.html';
+    window.location.href = 'login';
   } else {
     console.log('User cancelled logout');
   }
