@@ -1,0 +1,24 @@
+{
+  "name": "qr-menu-app",
+  "version": "1.0.0",
+  "description": "QR Menu - Retro Chai Admin Dashboard with Backend API",
+  "main": "admin/server.js",
+  "private": true,
+  "scripts": {
+    "start": "cd admin && npm install && node server.js",
+    "dev": "cd admin && npm run dev",
+    "install": "cd admin && npm install"
+  },
+  "engines": {
+    "node": "18.x"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.2.0",
+    "tailwindcss": "^4.2.0"
+  },
+  "dependencies": {
+    "animejs": "^4.3.6",
+    "chart.js": "^4.5.1",
+    "sweetalert2": "^11.26.20"
+  }
+}

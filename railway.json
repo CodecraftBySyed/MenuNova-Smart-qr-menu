@@ -1,0 +1,11 @@
+{
+  "build": {
+    "builder": "nixpacks"
+  },
+  "deploy": {
+    "startCommand": "cd admin && npm install && node server.js",
+    "restartPolicyMaxRetries": 3,
+    "restartPolicyWindow": 60,
+    "numReplicas": 1
+  }
+}
