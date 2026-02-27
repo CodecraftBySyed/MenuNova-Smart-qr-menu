@@ -1,7 +1,4 @@
 User-agent: *
-Disallow: 
-Disallow: /cgi-bin/
+Allow: /
+
 Sitemap: https://menunova-smart-qr-menu.pages.dev/sitemap.xml
-
-
-
